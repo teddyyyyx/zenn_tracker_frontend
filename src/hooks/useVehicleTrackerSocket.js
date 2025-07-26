@@ -6,7 +6,8 @@ export default function useVehicleTrackerSocket() {
   const [trail, setTrail] = useState([]); // Trail of positions for Polyline
 
   useEffect(() => {
-    const socket = io("http://localhost:3001"); // Adjust if backend runs elsewhere
+    // const socket = io("http://localhost:3001");
+    const socket = io("https://zenn-tracker-backend.onrender.com");
 
     socket.on("vehicle-location", ({ lat, lng }) => {
       const newPos = [lat, lng];
