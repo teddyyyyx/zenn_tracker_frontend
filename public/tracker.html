@@ -16,6 +16,8 @@
     <script>
         // const socket = io("http://localhost:3001"); // 
         const socket = io("https://zenn-tracker-backend.onrender.com"); //
+        const statusEl = document.getElementById("status");
+
 
         // Ask for GPS
         if ("geolocation" in navigator) {
