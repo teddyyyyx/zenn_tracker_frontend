@@ -1,0 +1,49 @@
+<!-- frontend/public/tracker.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Bus Tracker - Driver GPS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+    <h2>📍 Tracking vehicle position...</h2>
+    <p id="status">Waiting for GPS...</p>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        // const socket = io("http://localhost:3001"); // 
+        const socket = io("https://zenn-tracker-backend.onrender.com"); //
+
+        // Ask for GPS
+        if ("geolocation" in navigator) {
+            navigator.geolocation.watchPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    statusEl.textContent = `✅ Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}`;
+
+                    // 🚀 Send GPS to backend
+                    socket.emit("vehicle-location", {
+                        lat: latitude,
+                        lng: longitude,
+                    });
+                },
+                (error) => {
+                    console.error("GPS error:", error);
+                    statusEl.textContent = "❌ Error getting GPS: " + error.message;
+                },
+                {
+                    enableHighAccuracy: true,
+                    maximumAge: 1000,
+                    timeout: 15000,
+                }
+            );
+        } else {
+            statusEl.textContent = "❌ GPS not supported";
+        }
+    </script>
+</body>
+
+</html>
